@@ -1,7 +1,8 @@
 import urllib.request as req
-count=10
-
-def getData(url):
+count = 1        # 拜訪幾篇新聞
+visitedList = [] # 紀錄拜訪過網址，取得下篇相關新聞會檢查是否已拜訪過
+def getNewsData(url):
+    visitedList.append(url)
     request=req.Request(url, headers={
         "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
     })
@@ -40,18 +41,24 @@ def getData(url):
         print(content.get_text())
 
     #回傳下篇連結
-    nexturl=root.find("h2",class_="txt")
-    if nexturl!=None:
-        if nexturl.a!=None:
-            nexturl="https://news.tvbs.com.tw"+nexturl.a["href"]
-            return nexturl
+    nexturl=root.find_all("h2",class_="txt")
+    for content in nexturl:
+        if (content!=None):
+            if (content.a!=None):
+                    content="https://news.tvbs.com.tw"+content.a["href"]
+                    if(content not in visitedList):
+                        return content
+    else:
+        print("#######################相關新聞皆已拜訪過#######################")
+        return "none"
     
-
-
 url="https://news.tvbs.com.tw/world/2111412?from=life_extend"
-ind = 0
-while ind<count:
+index = 0
+while index<count:
     print("第"+str(ind+1)+"篇")
-    url=getData(url)
-    print("\n-------------------------------next--------------------------------")
-    ind+=1 
+    url=getNewsData(url)
+    if(url!="none"):
+        print("\n-------------------------------next--------------------------------")
+        index+=1 
+    else:
+        break
