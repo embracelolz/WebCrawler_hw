@@ -55,7 +55,7 @@ def getNewsData(url):
 url="https://news.tvbs.com.tw/world/2111412?from=life_extend"
 index = 0
 while index<count:
-    print("第"+str(ind+1)+"篇")
+    print("第"+str(index+1)+"篇")
     url=getNewsData(url)
     if(url!="none"):
         print("\n-------------------------------next--------------------------------")
